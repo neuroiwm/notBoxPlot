@@ -29,14 +29,10 @@ obj_nbp = modify_notBoxPlot(obj_nbp, 8, colors); % custom colors (3xN matrix, RG
 
 ## Quick Start
 
-```matlab
-addpath('./code/');
-data_input = randn(15, 3);
+`main.m` を実行すると、サンプルのプロットが生成されます。`is_paired` フラグで対応線（pairwise plot）の表示を制御できます。
 
-obj_nbp = notBoxPlot(data_input);
-obj_nbp = modify_notBoxPlot(obj_nbp, 8);
-pairwiseplot_nbp(obj_nbp);
-set(gca, 'FontSize', 20);
+```matlab
+is_paired = 1;  % 1: 対応線を表示, 0: 対応線を非表示
 ```
 
 ---
