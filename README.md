@@ -1,11 +1,51 @@
-# notBoxPlot
+# notBoxPlot (Fork)
 
-[![View notBoxPlot on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://uk.mathworks.com/matlabcentral/fileexchange/26508-notboxplot)
+This is a fork of [raacampbell/notBoxPlot](https://github.com/raacampbell/notBoxPlot) with added support for **pairwise line plots** and **color modification**.
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/raacampbell/notBoxPlot/gh-pages/images/nbp_example.png"  height=550px/>
+<img src="sample/sample.png" height=350px/>
 </p>
 
+## Added Features
+
+### Pairwise Plot (`pairwiseplot_nbp`)
+Draws lines connecting paired observations across groups, useful for visualizing within-subject or repeated-measures data. The function automatically handles the rendering order so that scatter points remain on top and patch elements stay in the background.
+
+```matlab
+obj_nbp = notBoxPlot(data_input);
+pairwiseplot_nbp(obj_nbp);            % default gray lines
+pairwiseplot_nbp(obj_nbp, 0.5, 1.5);  % line color intensity, line width
+pairwiseplot_nbp(obj_nbp, 0.5, 1.5, data_input); % pass raw data to handle NaN alignment
+```
+
+### Color Modification (`modify_notBoxPlot`)
+Applies a clean color scheme: gray SD/SEM patches with colored data points (default: teal, orange, blue). Point size is also configurable.
+
+```matlab
+obj_nbp = modify_notBoxPlot(obj_nbp);           % default colors, point size 8
+obj_nbp = modify_notBoxPlot(obj_nbp, 6);         % custom point size
+obj_nbp = modify_notBoxPlot(obj_nbp, 8, colors); % custom colors (3xN matrix, RGB columns)
+```
+
+## Quick Start
+
+```matlab
+addpath('./code/');
+data_input = randn(15, 3);
+
+obj_nbp = notBoxPlot(data_input);
+obj_nbp = modify_notBoxPlot(obj_nbp, 8);
+pairwiseplot_nbp(obj_nbp);
+set(gca, 'FontSize', 20);
+```
+
+---
+
+## Original README
+
+> The following is the original README from [raacampbell/notBoxPlot](https://github.com/raacampbell/notBoxPlot).
+
+[![View notBoxPlot on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://uk.mathworks.com/matlabcentral/fileexchange/26508-notboxplot)
 
 notBoxPlot is a MATLAB data visualisation function. 
 
@@ -14,54 +54,19 @@ Jittered raw data are plotted for each group. Also shown are the mean, and 95% c
 
 The function has several examples and there are various visualization possibilities in addition to those shown in the above screenshot. For instance, the coloured areas can be replaced by lines.
 
-Although it's worked well for situations I've needed it, I will be happy to modify the function if users come up against problems.
-
-## Features
-- Directly plot LinearModel objects from `fitlm` [NEW]
+### Features
+- Directly plot LinearModel objects from `fitlm`
 - Easily mix a variety of plot styles on one figure
 - Easy post-hoc modification of plot parameters via returned function handles
 - Statistics (mean, SD, etc) optionally returned 
 - Optional plotting of median in addition to mean 
 - Option to plot either a 95% confidence interval for the mean or a 95% t-interval
 
-## FAQ
-Q: "How can I modify the plot to look like..."
-<br />
-A: Most modifications can be done using the function handles. See the function help and the example function, NBP_example
-
-
-## Included functions
+### Included functions
 - notBoxPlot.m - generates plots as shown in screenshot
-- NBP.SEM_calc.m - calculate standard error of the mean. Provided as a separate function file so that it can be used for other purposes.
-- NBP.tInterval_calc.m - calculate a t-interval. For small sample sizes, the t-interval is larger than the SEM. Provided as a separate function file so that it can be used for other purposes.
+- NBP.SEM_calc.m - calculate standard error of the mean
+- NBP.tInterval_calc.m - calculate a t-interval
 - NBP.example - makes a nice example plot
 
-## Installation
+### Installation
 Add the ``code`` directory to your MATLAB path. Some operations (such as t-interval calculation) depend on the Stats Toolbox.
-
-
-## Changelog
-
-
-**v1.31 (28-11-17)**
-
-* Bugfix to SEM and t-interval calc functions that caused errors to be pooled when fed a matrix rather than a vector
-* Jitter is no "violin-like" so it scales with point density in Y. Looks neater. 
-
-
-**v1.3 (11-03-17)**
-
-* Remove legacy calls
-* Allow passing of a table, which automatically labels the axes
-* Pass a LinearModel, which automatically labels the axes and uses the model errors
-* Examples are now in separate files and doc text is neater
-* User can now optionally do `notBoxPlot(y,'jitter',0.5)` instead of `notBoxPlot(y,[],'jitter',0.5)` 
-
-
-**v1.2 (28-08-16)**
-
-* Add median to plots
-* Select SEM or t-interval from command line
-* Return stats as second output
-* Move to parameter/value pairs by default and warn user if they aren't doing this. 
-* Add unit tests.
